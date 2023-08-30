@@ -2,11 +2,16 @@
   "development": {
     "dialect": "mysql",
     "host": "localhost",
-    "port": 3000,
+    "port": 3306,
     "username": "root",
     "password": "",
     "database": "tuan123",
-    "logging": false
+    "logging": false,
+    "query": {
+      "raw": true
+    },
+    "timezone": "+07:00"
+    
   },
   "test": {
     "username": "root",
