@@ -23,7 +23,7 @@ let handleUserLogin = (email, password) => {
             if (isExist) {
                 //user already exist
                 let user = await db.User.findOne({
-                    attributes: ['email', 'roleId', 'password'],
+                    attributes: ['email', 'roleId', 'password', 'firstName', 'lastName'],
                     where: { email: email },
                     raw: true
                 })
@@ -205,23 +205,23 @@ let deleteUser = async (userId) => {
 }
 
 let getAllCodeService = (typeInput) => {
-    return new Promise ( async(resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
         try {
-            if(!typeInput){
+            if (!typeInput) {
                 resolve({
                     errCode: 1,
                     errMessage: 'Missing requied paraments !'
                 })
             }
 
-            let res  = {}
+            let res = {}
             let allCode = await db.Allcode.findAll({
-                where: {type: typeInput}
+                where: { type: typeInput }
             })
             res.errCode = 0
             res.data = allCode
             resolve(res)
-        }catch(e){
+        } catch (e) {
             reject(e)
         }
     })
