@@ -16,11 +16,11 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING
       },
-      value_En: {
+      valueEn: {
         allowNull: false,
         type: Sequelize.STRING
       },
-      value_Vi: {
+      valueVi: {
         allowNull: false,
         type: Sequelize.STRING
       },
