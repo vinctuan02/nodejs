@@ -4,20 +4,47 @@ import db from "../models"
 
 const salt = bcrypt.genSaltSync(10)
 
-let createNewUser = async (data) => {
+let checkUserEmail = (userEmail) => {
     return new Promise(async (resolve, reject) => {
         try {
-            let hashPasswordFromBcrypt = await hashUserPassword(data.password)
-            await db.User.create({
-                email: data.email,
-                password: hashPasswordFromBcrypt,
-                firstName: data.firstName,
-                lastName: data.lastName,
-                address: data.address,
-                phonenumber: data.phonenumber,
-                gender: data.gender === 1 ? true : false,
-                roleId: data.roleId
+            let user = await db.User.findOne({
+                where: { email: userEmail }
             })
+            if (user) {
+                resolve(true)
+            } else {
+                resolve(false)
+            }
+        } catch (e) {
+            console.log(e)
+            reject(e)
+        }
+    })
+}
+
+let createNewUser = async (data) => {
+    console.log("test")
+    return new Promise(async (resolve, reject) => {
+        try {
+            let emailIsAlready = await checkUserEmail(data.email)
+            if (emailIsAlready === true) {
+                resolve({
+                    errCode: 1,
+                    errMessage: "Email is already, please try another email."
+                })
+            } else {
+                let hashPasswordFromBcrypt = await hashUserPassword(data.password)
+                await db.User.create({
+                    email: data.email,
+                    password: hashPasswordFromBcrypt,
+                    firstName: data.firstName,
+                    lastName: data.lastName,
+                    address: data.address,
+                    phonenumber: data.phonenumber,
+                    gender: data.gender === 1 ? true : false,
+                    roleId: data.roleId
+                })
+            }
             resolve("Oke create a new user succeed")
         } catch (e) {
             reject(e)
@@ -95,15 +122,15 @@ let deleteUserById = (userId) => {
     return new Promise(async (resolve, reject) => {
         try {
             let user = await db.User.findOne({
-                where: {id: userId}
+                where: { id: userId }
             })
-            
-            if(user) {
+
+            if (user) {
                 await user.destroy()
             }
 
             resolve()
-        }catch(e) {
+        } catch (e) {
             reject(e)
         }
     })
