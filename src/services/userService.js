@@ -118,7 +118,6 @@ let createNewUser = (data) => {
     return new Promise(async (resolve, reject) => {
         try {
             let emailIsAlready = await checkUserEmail(data.email)
-
             if (emailIsAlready === true) {
                 resolve({
                     errCode: 1,
