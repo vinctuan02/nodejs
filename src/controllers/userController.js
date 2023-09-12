@@ -26,7 +26,7 @@ let handleGetAllUsers = async (req, res) => {
 
     if (!id) {
         return res.status(200).json({
-            errcode: 1,
+            errCode: 1,
             errMessage: "Missing required parameters",
             users: []
         })
@@ -35,7 +35,7 @@ let handleGetAllUsers = async (req, res) => {
     console.log(users)
 
     return res.status(200).json({
-        errcode: 0,
+        errCode: 0,
         errMessage: "Oke",
         users
     })

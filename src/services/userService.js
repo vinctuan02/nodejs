@@ -93,7 +93,6 @@ let getAllUsers = (userId) => {
         try {
             let users = ''
             if (userId === 'ALL') {
-                console.log("If")
                 users = await db.User.findAll({
                     attributes: {
                         exclude: ['password']
@@ -101,7 +100,6 @@ let getAllUsers = (userId) => {
                 })
             }
             if (userId && userId !== 'ALL') {
-                console.log("else")
                 users = await db.User.findOne({
                     where: { id: userId },
                     attributes: {
@@ -135,8 +133,9 @@ let createNewUser = (data) => {
                     lastName: data.lastName,
                     address: data.address,
                     phonenumber: data.phonenumber,
-                    gender: data.gender === 1 ? true : false,
-                    roleId: data.roleId
+                    gender: data.gender,
+                    roleId: data.roleId,
+                    positionId: data.positionId
                 })
                 resolve({
                     errCode: 0,
