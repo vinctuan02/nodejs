@@ -151,7 +151,7 @@ let createNewUser = (data) => {
 let updateUserData = (data) => {
     return new Promise(async (resolve, reject) => {
         try {
-            if (!data.id) {
+            if (!data.id || !data.gender || !data.positionId || !data.roleId) {
                 resolve({
                     errCode: 2,
                     errMessage: 'Missing requied parameters'
@@ -166,8 +166,12 @@ let updateUserData = (data) => {
                 user.firstName = data.firstName
                 user.lastName = data.lastName
                 user.address = data.address
+                user.gender = data.gender
+                user.positionId = data.positionId
+                user.roleId = data.roleId
+                user.phonenumber = data.phonenumber,
 
-                await user.save()
+                    await user.save()
                 resolve({
                     errCode: 0,
                     errMessage: 'Edit user is successed'

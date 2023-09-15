@@ -32,7 +32,7 @@ let handleGetAllUsers = async (req, res) => {
         })
     }
     let users = await userService.getAllUsers(id)
-    console.log(users)
+    // console.log(users)
 
     return res.status(200).json({
         errCode: 0,
@@ -48,6 +48,7 @@ let handleCreateNewUser = async (req, res) => {
 }
 
 let handleEditUser = async (req, res) => {
+    // console.log("handle edit user: ", req.body)
     let data = req.body
     let message = await userService.updateUserData(data)
     return res.status(200).json(message)
@@ -67,7 +68,7 @@ let handleDeleteUser = async (req, res) => {
 let getAllCode = async (req, res) => {
     try {
         let data = await userService.getAllCodeService(req.query.type)
-        console.log(data)
+        // console.log(data)
         return res.status(200).json(data)
     } catch (e) {
         console.log(e)
