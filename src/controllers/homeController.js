@@ -59,7 +59,7 @@ let deleteCRUD = async (req, res) => {
         await CRUDService.deleteUserById(id)
         return res.send("Delete the user succeed")
     }else{
-        return res.sedn("The user not found")
+        return res.send("The user not found")
     }
 }
 

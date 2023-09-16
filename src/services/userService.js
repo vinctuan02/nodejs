@@ -34,12 +34,12 @@ let handleUserLogin = (email, password) => {
                     if (checkPassword) {
                         userData.errCode = 0
                         userData.errMessage = 'Oke'
-                        console.log(user)
+                        // console.log(user)
                         delete user.password
                         userData.user = user
                     } else {
-                        userData.errCode = 3,
-                            userData.errMessage = 'Wrong password'
+                        userData.errCode = 3
+                        userData.errMessage = 'Wrong password'
                     }
 
                 } else {
