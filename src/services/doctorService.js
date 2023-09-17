@@ -1,11 +1,12 @@
 import db from "../models"
 
 let getTopDoctorHomeService = (limitInput) => {
+    console.log("limitInput service: ", limitInput)
     return new Promise(async (resolve, reject) => {
         try {
             let users = await db.User.findAll({
                 limit: limitInput,
-                where: { roleId: 'R2' },
+                where: { roleId: 'R1' },
                 oder: [['createAt', 'DESC']],
                 attributes: {
                     exclude: ['password', 'image']
@@ -17,6 +18,8 @@ let getTopDoctorHomeService = (limitInput) => {
                 raw: true,
                 nest: true
             })
+
+            console.log("Test users: ", users)
             resolve({
                 errCode: 0,
                 data: users
