@@ -6,10 +6,10 @@ let getTopDoctorHomeService = (limitInput) => {
         try {
             let users = await db.User.findAll({
                 limit: limitInput,
-                where: { roleId: 'R1' },
+                where: { roleId: 'R2' },
                 oder: [['createAt', 'DESC']],
                 attributes: {
-                    exclude: ['password', 'image']
+                    exclude: ['password']
                 },
                 include: [
                     { model: db.Allcode, as: 'positionData', attributes: ['valueEn', 'valueVi'] },

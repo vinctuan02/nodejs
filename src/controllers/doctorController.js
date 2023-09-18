@@ -4,7 +4,7 @@ let getTopDoctorHome = async (req, res) => {
     console.log("test getTOpDoctorHome", req.query)
     let limit = req.query.limit
     if (!limit) {
-        limit = 3
+        limit = 10
     }
     try {
         let doctors = await doctorService.getTopDoctorHomeService(+limit)
