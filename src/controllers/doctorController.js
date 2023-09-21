@@ -31,10 +31,9 @@ let getAllDoctors = async (req, res) => {
     }
 }
 
-
 let postInforDoctor = async (req, res) => {
     try {
-        // console.log("test req: ", req.body)
+        console.log("test req: ", req.body)
         // let response = await doctorService.getAllDoctors()
         let response = await doctorService.saveInforDoctor(req.body)
         console.log("Test respone: ", response)

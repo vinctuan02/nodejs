@@ -31,7 +31,6 @@ let getTopDoctorHomeService = (limitInput) => {
     )
 }
 
-
 let getAllDoctors = () => {
     // console.log("Get all doctor service: ")
     return new Promise(async (resolve, reject) => {
@@ -55,27 +54,26 @@ let getAllDoctors = () => {
 
 let saveInforDoctor = async (inputData) => {
     console.log('test input data', inputData)
-    new Promise(async (resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
         try {
-            if (!inputData.doctorId || !inputData.contentHTML || !inputData.contentMarkdown) {
-                console.log("err")
-                reject({
-                    errCode: 0
+            if (!inputData.contentHTML || !inputData.contentMarkdown || !inputData.description) {
+                resolve({
+                    errCode: 1,
+                    errMessage: 'Missing parameter.'
                 })
-                console.log("test resolve")
             } else {
                 console.log("Save")
-                await db.Markdown.save({
+                await db.Markdown.create({
                     contentHTML: inputData.contentHTML,
-                    contentMarkDown: inputData.contentMarkDown,
+                    contentMarkdown: inputData.contentMarkdown,
                     description: inputData.description,
-                    doctorId: inputData.doctorId,
-                    specialtyId: inputData.specialtyId
+                    // doctorId: inputData.doctorId,
+                    // specialtyId: inputData.specialtyId
                 })
 
                 resolve({
                     errCode: 0,
-                    message: 'Save infor doctor success.'
+                    errMessage: 'Save infor doctor success.'
                 })
             }
         } catch (e) {

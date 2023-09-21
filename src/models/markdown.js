@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
   };
   Markdown.init({
     contentHTML: DataTypes.TEXT('long'),
-    contentMarkDown: DataTypes.TEXT('long'),
+    contentMarkdown: DataTypes.TEXT('long'),
     description: DataTypes.TEXT('long'),
     doctorId: DataTypes.INTEGER,
     specialtyId: DataTypes.INTEGER,
