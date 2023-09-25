@@ -32,6 +32,8 @@ let initWebRouter = (app) => {
 
     router.post('/api/save-infor-doctor', doctorControler.postInforDoctor)
 
+    router.get('/api/get-detail-doctor-by-id', doctorControler.getDetailDoctorById)
+
 
     return app.use('/', router)
 }

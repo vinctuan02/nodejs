@@ -53,7 +53,7 @@ let getAllDoctors = () => {
 }
 
 let saveInforDoctor = async (inputData) => {
-    console.log('test input data', inputData)
+    // console.log('test input data', inputData)
     return new Promise(async (resolve, reject) => {
         try {
             if (!inputData.contentHTML || !inputData.contentMarkdown || !inputData.description) {
@@ -62,12 +62,12 @@ let saveInforDoctor = async (inputData) => {
                     errMessage: 'Missing parameter.'
                 })
             } else {
-                console.log("Save")
+                // console.log("Save")
                 await db.Markdown.create({
                     contentHTML: inputData.contentHTML,
                     contentMarkdown: inputData.contentMarkdown,
                     description: inputData.description,
-                    // doctorId: inputData.doctorId,
+                    doctorId: inputData.doctorId,
                     // specialtyId: inputData.specialtyId
                 })
 
@@ -82,8 +82,49 @@ let saveInforDoctor = async (inputData) => {
     })
 }
 
+let getDetailDoctorById = (inputId) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!inputId) {
+                resolve({
+                    errCode: -1,
+                    errMessage: 'Missing required parameter !'
+                })
+            } else {
+                let data = await db.User.findOne({
+                    where: {
+                        id: inputId
+                    },
+                    attributes: {
+                        exclude: ['password', 'image']
+                    },
+                    include: [
+                        {
+                            model: db.Markdown,
+                            attributes: ['contentHTML', 'contentMarkdown', 'description']
+                        },
+                        {
+                            model: db.Allcode, as: 'positionData',
+                            attributes: ['valueEn', 'valueVi']
+                        },
+                    ],
+                    raw: true,
+                    nest: true
+                })
+                resolve({
+                    errCode: 0,
+                    data: data
+                })
+            }
+        } catch (e) {
+            reject(e)
+        }
+    })
+}
+
 module.exports = {
     getTopDoctorHomeService,
     getAllDoctors,
-    saveInforDoctor: saveInforDoctor
+    saveInforDoctor: saveInforDoctor,
+    getDetailDoctorById: getDetailDoctorById
 }
