@@ -1,7 +1,7 @@
 import db from "../models"
 
 let getTopDoctorHomeService = (limitInput) => {
-    console.log("limitInput service: ", limitInput)
+    // console.log("limitInput service: ", limitInput)
     return new Promise(async (resolve, reject) => {
         try {
             let users = await db.User.findAll({
@@ -19,7 +19,7 @@ let getTopDoctorHomeService = (limitInput) => {
                 nest: true
             })
 
-            console.log("Test users: ", users)
+            // console.log("Test users: ", users)
             resolve({
                 errCode: 0,
                 data: users
@@ -96,7 +96,7 @@ let getDetailDoctorById = (inputId) => {
                         id: inputId
                     },
                     attributes: {
-                        exclude: ['password', 'image']
+                        exclude: ['password']
                     },
                     include: [
                         {
@@ -111,6 +111,12 @@ let getDetailDoctorById = (inputId) => {
                     raw: true,
                     nest: true
                 })
+
+                if (data && data.image) {
+                    data.image = new Buffer(data.image, 'base64').toString('binary')
+                }
+
+                if (!data) data = {}
                 resolve({
                     errCode: 0,
                     data: data

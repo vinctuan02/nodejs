@@ -1,7 +1,7 @@
 import doctorService from '../services/doctorService'
 
 let getTopDoctorHome = async (req, res) => {
-    console.log("test getTOpDoctorHome", req.query)
+    // console.log("test getTOpDoctorHome", req.query)
     let limit = req.query.limit
     if (!limit) {
         limit = 10
@@ -36,7 +36,7 @@ let postInforDoctor = async (req, res) => {
         // console.log("test req: ", req.body)
         // let response = await doctorService.getAllDoctors()
         let response = await doctorService.saveInforDoctor(req.body)
-        console.log("Test respone: ", response)
+        // console.log("Test respone: ", response)
         return res.status(200).json(response)
     } catch (e) {
         return res.status(200).json({
@@ -47,8 +47,10 @@ let postInforDoctor = async (req, res) => {
 }
 
 let getDetailDoctorById = async (req, res) => {
+    // console.log("req.query: ", req.query)
     try {
         let infor = await doctorService.getDetailDoctorById(req.query.id)
+        // console.log("infor: ", infor)
         return res.status(200).json(infor)
     } catch (e) {
         console.log(e)
