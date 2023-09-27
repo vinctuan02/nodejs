@@ -54,22 +54,39 @@ let getAllDoctors = () => {
 
 let saveInforDoctor = async (inputData) => {
     // console.log('test input data', inputData)
+    console.log("inputData.action: ", inputData.action)
     return new Promise(async (resolve, reject) => {
         try {
-            if (!inputData.contentHTML || !inputData.contentMarkdown || !inputData.description) {
+            if (!inputData.contentHTML || !inputData.contentMarkdown ||
+                !inputData.description || !inputData.action) {
                 resolve({
                     errCode: 1,
                     errMessage: 'Missing parameter.'
                 })
             } else {
-                // console.log("Save")
-                await db.Markdown.create({
-                    contentHTML: inputData.contentHTML,
-                    contentMarkdown: inputData.contentMarkdown,
-                    description: inputData.description,
-                    doctorId: inputData.doctorId,
-                    // specialtyId: inputData.specialtyId
-                })
+                if (inputData.action == 'CREATE') {
+                    console.log("CREATE")
+                    await db.Markdown.create({
+                        contentHTML: inputData.contentHTML,
+                        contentMarkdown: inputData.contentMarkdown,
+                        description: inputData.description,
+                        doctorId: inputData.doctorId,
+                        // specialtyId: inputData.specialtyId
+                    })
+                } else if (inputData.action == 'EDIT') {
+                    console.log("EDIT")
+                    let doctorMarkdown = await db.Markdown.findOne({
+                        where: { doctorId: inputData.doctorId },
+                        raw: false
+                    })
+                    // console.log("doctorMarkdown: ", doctorMarkdown)
+                    if (doctorMarkdown) {
+                        doctorMarkdown.contentHTML = inputData.contentHTML
+                        doctorMarkdown.contentMarkdown = inputData.contentMarkdown
+                        doctorMarkdown.description = inputData.description
+                        await doctorMarkdown.save()
+                    }
+                }
 
                 resolve({
                     errCode: 0,
