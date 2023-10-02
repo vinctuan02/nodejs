@@ -1,4 +1,7 @@
 import db from "../models"
+require('dotenv').config()
+
+const MAX_NUMBER_SCHEDULE = process.env.MAX_NUMBER_SCHEDULE || 10
 
 let getTopDoctorHomeService = (limitInput) => {
     // console.log("limitInput service: ", limitInput)
@@ -145,9 +148,54 @@ let getDetailDoctorById = (inputId) => {
     })
 }
 
+let bulkCreateSchedule = (data) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!data.arrSchedule) {
+                resolve({
+                    errCode: -1,
+                    errMessage: 'Missing required param !'
+                })
+            } else {
+                let schedule = data.arrSchedule
+                if (schedule && schedule.length > 0) {
+                    schedule = schedule.map((item) => {
+                        item.maxNumber = MAX_NUMBER_SCHEDULE
+                        return item
+                    })
+                }
+                console.log("data: ", schedule)
+                await db.Schedule.bulkCreate(schedule)
+                resolve({
+                    errCode: 0,
+                    errMessage: 'Oke'
+                })
+            }
+        } catch (e) {
+            reject({
+                errCode: -1,
+                errMessage: "hihi "
+            })
+        }
+    })
+}
+
 module.exports = {
     getTopDoctorHomeService,
     getAllDoctors,
     saveInforDoctor: saveInforDoctor,
-    getDetailDoctorById: getDetailDoctorById
+    getDetailDoctorById: getDetailDoctorById,
+    bulkCreateSchedule: bulkCreateSchedule
 }
+
+
+// [
+//     { doctorId: 74, date: 'Invalid date', timeType: 'T2', maxNumber: 10 },
+//     { doctorId: 74, date: 'Invalid date', timeType: 'T3', maxNumber: 10 }
+// ]
+
+// [
+//     { username: 'barfooz', isAdmin: true },
+//     { username: 'foo', isAdmin: true },
+//     { username: 'bar', isAdmin: false }
+// ]
