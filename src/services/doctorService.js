@@ -149,6 +149,7 @@ let getDetailDoctorById = (inputId) => {
 }
 
 let bulkCreateSchedule = (data) => {
+    console.log("data doctorService: ", data)
     return new Promise(async (resolve, reject) => {
         try {
             if (!data.arrSchedule) {
@@ -164,7 +165,7 @@ let bulkCreateSchedule = (data) => {
                         return item
                     })
                 }
-                console.log("data: ", schedule)
+                console.log("data11: ", schedule)
                 await db.Schedule.bulkCreate(schedule)
                 resolve({
                     errCode: 0,
