@@ -4,7 +4,6 @@ import userController from "../controllers/userController"
 import doctorControler from "../controllers/doctorController"
 
 
-
 let router = express.Router()
 
 let initWebRouter = (app) => {
@@ -33,7 +32,9 @@ let initWebRouter = (app) => {
     router.post('/api/save-infor-doctor', doctorControler.postInforDoctor)
 
     router.get('/api/get-detail-doctor-by-id', doctorControler.getDetailDoctorById)
-    router.post('/api/bulk-create-schedule',doctorControler.bulkCreateSchedule)
+    router.post('/api/bulk-create-schedule', doctorControler.bulkCreateSchedule)
+
+    router.get('/api/get-schedule-doctor-by-date', doctorControler.getScheduleByDate)
 
 
     return app.use('/', router)
