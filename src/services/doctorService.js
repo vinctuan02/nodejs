@@ -1,5 +1,6 @@
 import db from "../models"
 require('dotenv').config()
+import _ from 'lodash'
 
 const MAX_NUMBER_SCHEDULE = process.env.MAX_NUMBER_SCHEDULE || 10
 
@@ -148,8 +149,42 @@ let getDetailDoctorById = (inputId) => {
     })
 }
 
+
+let checkRecordIsExist = (data) => {
+    return new Promise(async (resolve, reject) => {
+
+        // let dataScheduleFromDB = 1
+        // console.log("data: ", data.arrSchedule)
+        // console.log("date string: ", '' + data.arrSchedule[0].date)
+        for (let i = 0; i < data.arrSchedule.length; i++) {
+            // console.log("data schedule for :", data.arrSchedule[i])
+            let dataScheduleFromDB = await db.Schedule.findOne({
+                where: {
+                    doctorId: data.arrSchedule[i].doctorId,
+                    date: data.arrSchedule[i].date + '',
+                    timeType: data.arrSchedule[i].timeType
+                }
+            })
+            if (_.isEmpty(dataScheduleFromDB)) {
+                console.log("Record isn't exist: ", data.arrSchedule[i])
+            } else {
+                console.log("Record is exist: ", data.arrSchedule[i])
+                resolve(true)
+            }
+        }
+
+        // console.log("data from manage schedule: ", data.arrSchedule)
+        // console.log("data from DB 22: ", dataScheduleFromDB)
+        resolve(false)
+    })
+}
+
 let bulkCreateSchedule = (data) => {
-    console.log("data doctorService: ", data)
+    // return ({
+    //     errCode: 0,
+    //     errMessage: "Check data"
+    // })
+    // console.log("data doctorService: ", data)
     return new Promise(async (resolve, reject) => {
         try {
             if (!data.arrSchedule) {
@@ -165,11 +200,25 @@ let bulkCreateSchedule = (data) => {
                         return item
                     })
                 }
+                // console.log('Check record is empty: ', await checkRecordIsExist(data))
                 // console.log("data11: ", schedule)
-                await db.Schedule.bulkCreate(schedule)
+                if (await checkRecordIsExist(data)) {
+                    console.log("Record is exist, please try again!")
+                    resolve({
+                        errCode: -1,
+                        errMessage: "Schedule is exist!"
+                    })
+                } else {
+                    console.log("Record isn't exist")
+                    await db.Schedule.bulkCreate(schedule)
+                    resolve({
+                        errCode: 0,
+                        errMessage: 'Oke'
+                    })
+                }
                 resolve({
                     errCode: 0,
-                    errMessage: 'Oke'
+                    errMessage: "Check data"
                 })
             }
         } catch (e) {
