@@ -58,16 +58,23 @@ let getAllDoctors = () => {
 
 let saveInforDoctor = async (inputData) => {
     // console.log('test input data', inputData)
-    console.log("inputData.action: ", inputData.action)
+    // console.log("inputData.action: ", inputData.action)
     return new Promise(async (resolve, reject) => {
         try {
-            if (!inputData.contentHTML || !inputData.contentMarkdown ||
-                !inputData.description || !inputData.action) {
+            if (
+                !inputData.contentHTML || !inputData.contentMarkdown ||
+                !inputData.description || !inputData.action ||
+                !inputData.selectedPrice || !inputData.selectedPayment ||
+                !inputData.selectedProvince || !inputData.nameClinic ||
+                !inputData.addressClinic || !inputData.note
+            ) {
+                console.log('Missing parameter')
                 resolve({
                     errCode: 1,
                     errMessage: 'Missing parameter.'
                 })
             } else {
+                console.log("xxx")
                 if (inputData.action == 'CREATE') {
                     console.log("CREATE")
                     await db.Markdown.create({
@@ -77,12 +84,15 @@ let saveInforDoctor = async (inputData) => {
                         doctorId: inputData.doctorId,
                         // specialtyId: inputData.specialtyId
                     })
-                } else if (inputData.action == 'EDIT') {
+                }
+
+                if (inputData.action == 'EDIT') {
                     console.log("EDIT")
                     let doctorMarkdown = await db.Markdown.findOne({
                         where: { doctorId: inputData.doctorId },
                         raw: false
                     })
+                    // console.log("doctor Markdown: ", doctorMarkdown)
                     // console.log("doctorMarkdown: ", doctorMarkdown)
                     if (doctorMarkdown) {
                         doctorMarkdown.contentHTML = inputData.contentHTML
@@ -92,6 +102,35 @@ let saveInforDoctor = async (inputData) => {
                     }
                 }
 
+                let doctorInfor = await db.Doctor_Infor.findOne({
+                    where: { id: 1 },
+                    raw: false
+                })
+
+                console.log('doctorInfor: ', doctorInfor)
+
+                if (true) {
+                    // update
+                    console.log("update")
+                    // doctorInfor.priceId = inputData.priceId
+                    // doctorInfor.provinceId = inputData.provinceId
+                    // doctorInfor.paymentId = inputData.paymentId
+                    // doctorInfor.nameClinic = inputData.nameClinic
+                    // doctorInfor.addressClinic = inputData.addressClinic
+                    // doctorInfor.note = doctorInfor.note
+                    // await doctorInfor.save()
+                } else {
+                    // create
+                    console.log("create")
+                    // db.create({
+                    //     priceId: inputData.priceId,
+                    //     provinceId: inputData.provinceId,
+                    //     paymentId: inputData.paymentId,
+                    //     nameClinic: inputData.nameClinic,
+                    //     addressClinic: inputData.addressClinic,
+                    //     note: doctorInfor.note
+                    // })
+                }
                 resolve({
                     errCode: 0,
                     errMessage: 'Save infor doctor success.'

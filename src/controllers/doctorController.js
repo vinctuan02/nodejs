@@ -39,7 +39,7 @@ let postInforDoctor = async (req, res) => {
         // console.log("Test respone: ", response)
         return res.status(200).json(response)
     } catch (e) {
-        return res.status(200).json({
+        return res.status(200).json({ 
             errCode: -1,
             errMessage: "Post infor doctor fail"
         })

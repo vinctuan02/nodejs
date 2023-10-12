@@ -12,7 +12,7 @@ module.exports = {
                 type: Sequelize.INTEGER,
                 allowNull: false
             },
-            clipriceIdnicId: {
+            priceId: {
                 type: Sequelize.STRING,
                 allowNull: false
             },
