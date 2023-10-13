@@ -13,10 +13,10 @@ module.exports = (sequelize, DataTypes) => {
             // define association here
         }
     };
-    
+
     Doctor_Infor.init({
         doctorId: DataTypes.INTEGER,
-        clipriceIdnicId: DataTypes.STRING,
+        priceId: DataTypes.STRING,
         provinceId: DataTypes.STRING,
         paymentId: DataTypes.STRING,
         addressClinic: DataTypes.STRING,

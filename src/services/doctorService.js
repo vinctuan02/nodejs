@@ -1,6 +1,6 @@
 import db from "../models"
 require('dotenv').config()
-import _ from 'lodash'
+import _, { some } from 'lodash'
 
 const MAX_NUMBER_SCHEDULE = process.env.MAX_NUMBER_SCHEDULE || 10
 
@@ -57,26 +57,24 @@ let getAllDoctors = () => {
 }
 
 let saveInforDoctor = async (inputData) => {
-    // console.log('test input data', inputData)
     // console.log("inputData.action: ", inputData.action)
+    // console.log("input Data: ", inputData)
     return new Promise(async (resolve, reject) => {
         try {
-            if (
-                !inputData.contentHTML || !inputData.contentMarkdown ||
+            if (!inputData.contentHTML || !inputData.contentMarkdown ||
                 !inputData.description || !inputData.action ||
                 !inputData.selectedPrice || !inputData.selectedPayment ||
                 !inputData.selectedProvince || !inputData.nameClinic ||
                 !inputData.addressClinic || !inputData.note
             ) {
-                console.log('Missing parameter')
                 resolve({
                     errCode: 1,
                     errMessage: 'Missing parameter.'
                 })
             } else {
-                console.log("xxx")
+                //upsert Markdown
                 if (inputData.action == 'CREATE') {
-                    console.log("CREATE")
+                    // console.log("CREATE")
                     await db.Markdown.create({
                         contentHTML: inputData.contentHTML,
                         contentMarkdown: inputData.contentMarkdown,
@@ -84,15 +82,12 @@ let saveInforDoctor = async (inputData) => {
                         doctorId: inputData.doctorId,
                         // specialtyId: inputData.specialtyId
                     })
-                }
-
-                if (inputData.action == 'EDIT') {
-                    console.log("EDIT")
+                } else if (inputData.action == 'EDIT') {
+                    // console.log("EDIT")
                     let doctorMarkdown = await db.Markdown.findOne({
                         where: { doctorId: inputData.doctorId },
                         raw: false
                     })
-                    // console.log("doctor Markdown: ", doctorMarkdown)
                     // console.log("doctorMarkdown: ", doctorMarkdown)
                     if (doctorMarkdown) {
                         doctorMarkdown.contentHTML = inputData.contentHTML
@@ -103,34 +98,40 @@ let saveInforDoctor = async (inputData) => {
                 }
 
                 let doctorInfor = await db.Doctor_Infor.findOne({
-                    where: { id: 1 },
+                    where: { doctorId: inputData.doctorId },
                     raw: false
                 })
 
-                console.log('doctorInfor: ', doctorInfor)
-
-                if (true) {
+                if (doctorInfor) {
                     // update
-                    console.log("update")
-                    // doctorInfor.priceId = inputData.priceId
-                    // doctorInfor.provinceId = inputData.provinceId
-                    // doctorInfor.paymentId = inputData.paymentId
-                    // doctorInfor.nameClinic = inputData.nameClinic
-                    // doctorInfor.addressClinic = inputData.addressClinic
-                    // doctorInfor.note = doctorInfor.note
-                    // await doctorInfor.save()
+                    // console.log("doctorInfor from db: ", doctorInfor)
+                    // console.log("update")
+                    doctorInfor.doctorId = inputData.doctorId
+                    doctorInfor.priceId = inputData.selectedPrice
+                    doctorInfor.provinceId = inputData.selectedProvince
+                    doctorInfor.paymentId = inputData.selectedPayment
+                    doctorInfor.nameClinic = inputData.nameClinic
+                    doctorInfor.addressClinic = inputData.addressClinic
+                    doctorInfor.note = inputData.note
+                    await doctorInfor.save()
+                    // console.log("doctorInfor Update: ", doctorInfor)
+                    // console.log("update success")
                 } else {
                     // create
-                    console.log("create")
-                    // db.create({
-                    //     priceId: inputData.priceId,
-                    //     provinceId: inputData.provinceId,
-                    //     paymentId: inputData.paymentId,
-                    //     nameClinic: inputData.nameClinic,
-                    //     addressClinic: inputData.addressClinic,
-                    //     note: doctorInfor.note
-                    // })
+                    // console.log("create")
+                    // console.log("doctorInfor from db: ", doctorInfor)
+                    db.Doctor_Infor.create({
+                        doctorId: inputData.doctorId,
+                        priceId: inputData.selectedPrice,
+                        provinceId: inputData.selectedProvince,
+                        paymentId: inputData.selectedPayment,
+                        nameClinic: inputData.nameClinic,
+                        addressClinic: inputData.addressClinic,
+                        note: inputData.note
+                    })
+                    // console.log("create success")
                 }
+
                 resolve({
                     errCode: 0,
                     errMessage: 'Save infor doctor success.'
