@@ -168,6 +168,13 @@ let getDetailDoctorById = (inputId) => {
                             model: db.Allcode, as: 'positionData',
                             attributes: ['valueEn', 'valueVi']
                         },
+                        {
+                            model: db.Doctor_Infor,
+                            // attributes: ['valueEn', 'valueVi']
+                            attributes: {
+                                exclude: ['id', 'doctorId']
+                            }
+                        },
                     ],
                     raw: true,
                     nest: true
