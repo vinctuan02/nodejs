@@ -23,7 +23,7 @@ let checkUserEmail = (userEmail) => {
 }
 
 let createNewUser = async (data) => {
-    console.log("test")
+    // console.log("test")
     return new Promise(async (resolve, reject) => {
         try {
             let emailIsAlready = await checkUserEmail(data.email)
